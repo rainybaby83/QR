@@ -5,6 +5,7 @@ public class MyPanel extends JPanel {
 
     MyPanel() {
         super();
+        this.setLayout(null);
         j = new JScrollPane(this);
         j.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         j.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -19,10 +20,8 @@ public class MyPanel extends JPanel {
         // 顺序：编号 名称  产权  部门
         qr.setText("DN123456","电脑","示例","示例");
         qr.setQR("DN123456");
-        qr.setBounds(0, 0, 240, 160);
+        qr.setBounds(0, 0, Const.PAPER_WIDTH,Const.PAPER_HEIGHT);
         this.add(qr);
     }
-
-
 
 }

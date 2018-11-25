@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.print.*;
-import java.util.ArrayList;
 
 public class MainApp extends JFrame {
     private MyPanel imgPanel;
@@ -22,7 +21,7 @@ public class MainApp extends JFrame {
         super();
         initApp();
         addComponentListener();
-        initPrinterJob();
+        job = PrinterJob.getPrinterJob();
 
     }
 
@@ -46,17 +45,15 @@ public class MainApp extends JFrame {
         this.add(richtext);
 
         btnResolve = new MyIconButton(Const.ICON_RESOLVE, Const.ICON_RESOLVE_ENABLED, Const.ICON_RESOLVE);
-        btnPrint = new MyIconButton(Const.ICON_PRINT, Const.ICON_PRINT_ENABLED, Const.ICON_PRINT);
-
         btnResolve.setLocation(richtext.getX() + richtext.getWidth() + 25, richtext.getY());
-        btnPrint.setLocation(btnResolve.getX(), btnResolve.getY() + btnResolve.getHeight() + 20 );
         this.add(btnResolve);
+
+        btnPrint = new MyIconButton(Const.ICON_PRINT, Const.ICON_PRINT_ENABLED, Const.ICON_PRINT);
+        btnPrint.setLocation(btnResolve.getX(), btnResolve.getY() + btnResolve.getHeight() + 20 );
         this.add(btnPrint);
 
         imgPanel = new MyPanel();
-        imgPanel.setLayout(null);
         imgPanel.setBounds(btnResolve.getX() + btnResolve.getWidth() + 25, 20, 240, richtext.getHeight());
-        imgPanel.setBackground(Color.white);
         imgPanel.j.setBounds(imgPanel.getX(),imgPanel.getY(),imgPanel.getWidth()+20,imgPanel.getHeight());
         this.add(imgPanel.j);
 
@@ -73,7 +70,6 @@ public class MainApp extends JFrame {
                 //组件状态可用、并且左键点击，才可以执行代码
                 if ((btnResolve.isEnabled()) && (e.getButton() == MouseEvent.BUTTON1)) {
                     clickBtnResolve();
-
                 }
             }
         });
@@ -87,8 +83,8 @@ public class MainApp extends JFrame {
                 }
             }
         });
-    }
 
+    }
 
     /**
      * 解析
@@ -97,7 +93,7 @@ public class MainApp extends JFrame {
         imgPanel.removeAll();
         //1 整理字符，去除tab
         String longstr = richtext.getText().trim();
-        longstr = (String) StringUtils.replace(longstr, "\t","，");
+        longstr = StringUtils.replace(longstr, "\t","，");
         richtext.setText(longstr);
 
         //2、分组，二维数组
@@ -105,23 +101,22 @@ public class MainApp extends JFrame {
         String shortStr[] = StringUtils.split(longstr, "\n");
         String unitStr[][] = new String[shortStr.length][];
         int countQR = 0;
-        int qrHeight = 160;
         for (int i = 0; i < shortStr.length; i++) {
             unitStr[i] = StringUtils.split(shortStr[i], "，");
             if (unitStr[i].length >= 4) {
                 MyQR qr = new MyQR();
                 // 顺序：编号 名称  产权  部门
                 qr.setText(unitStr[i][1],unitStr[i][0],unitStr[i][3],unitStr[i][2]);
-                qr.setQR(unitStr[i][0]);
-                qr.setBounds(0, qrHeight * i, 240, qrHeight);
+                qr.setQR(unitStr[i][1]);
+                qr.setBounds(0, (int) Const.PAPER_HEIGHT * i, Const.PAPER_WIDTH, Const.PAPER_HEIGHT);
                 imgPanel.add(qr);
                 countQR++;
             }
         }
 
         //调整下拉框高度
-        if (imgPanel.getHeight() < qrHeight * countQR) {
-            imgPanel.setPreferredSize(new Dimension(imgPanel.getWidth(), qrHeight * countQR));
+        if (imgPanel.getHeight() < Const.PAPER_HEIGHT * countQR) {
+            imgPanel.setPreferredSize(new Dimension(imgPanel.getWidth(), (int) (Const.PAPER_HEIGHT * countQR)));
         }
         imgPanel.j.updateUI();
     }
@@ -133,20 +128,23 @@ public class MainApp extends JFrame {
      private void clickBtnPrint() {
          boolean ok = job.printDialog();
          if (ok) {
-             ArrayList<MyQR> qrList = new ArrayList<>();
-             try {
-                 job.print();
+             Paper paper = new Paper();
+             PageFormat pf = new PageFormat();
+             paper.setSize(Const.PAPER_WIDTH, Const.PAPER_HEIGHT);
+             paper.setImageableArea(0,0,paper.getWidth(),paper.getHeight());
+             pf.setPaper(paper);
 
+             Book printBook = new Book();
+             try {
                  int count = imgPanel.getComponentCount();
                  for (int i = 0; i < count; i++) {
                      Object obj = imgPanel.getComponent(i);
                      if (obj instanceof MyQR) {
-//                         qrList.add((MyQR)obj);
-                         job.setPrintable((MyQR)obj);
-                         job.print();
+                       printBook.append((MyQR)obj, pf);
                      }
                  }
-
+                 job.setPageable(printBook);
+                 job.print();
 
              } catch (Exception e) {
                  e.printStackTrace();
@@ -163,12 +161,6 @@ public class MainApp extends JFrame {
         this.setLocation((tk.getScreenSize().width - this.getWidth()) / 2,
                 (tk.getScreenSize().height - this.getHeight()) / 2);
     }
-
-
-    private void initPrinterJob() {
-        job = PrinterJob.getPrinterJob();
-    }
-
 
 
     public static void main(String[] args) {
