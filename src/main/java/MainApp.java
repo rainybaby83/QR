@@ -22,9 +22,7 @@ public class MainApp extends JFrame {
         initApp();
         addComponentListener();
         job = PrinterJob.getPrinterJob();
-
     }
-
 
     /**
      * 初始化
@@ -35,13 +33,17 @@ public class MainApp extends JFrame {
             UIManager.setLookAndFeel(lookAndFeel);
         } catch (Exception ignored) {
         }
-
+        this.setResizable(false);
         this.setLayout(null);
-        this.setSize(new Dimension(1000, 730));
+        this.setSize(new Dimension(950, 700));
+        this.setTitle(Const.APP_NAME);
+        this.setIconImage(Const.ICON_APP.getImage());
         this.frameMoveCenter();
 
         richtext.setBounds(20,20,500,600);
         richtext.setBackground(Color.white);
+        richtext.setFont(Const.SONG_14);
+//        richtext.setText("请调整EXCEL列的顺序，按照“编号、名称、部门、产权”的顺序提交。");
         this.add(richtext);
 
         btnResolve = new MyIconButton(Const.ICON_RESOLVE, Const.ICON_RESOLVE_ENABLED, Const.ICON_RESOLVE);
@@ -53,10 +55,9 @@ public class MainApp extends JFrame {
         this.add(btnPrint);
 
         imgPanel = new MyPanel();
-        imgPanel.setBounds(btnResolve.getX() + btnResolve.getWidth() + 25, 20, 240, richtext.getHeight());
+        imgPanel.setBounds(btnResolve.getX() + btnResolve.getWidth() + 25, 20, Const.PAPER_WIDTH, richtext.getHeight());
         imgPanel.j.setBounds(imgPanel.getX(),imgPanel.getY(),imgPanel.getWidth()+20,imgPanel.getHeight());
         this.add(imgPanel.j);
-
     }
 
 
@@ -106,17 +107,19 @@ public class MainApp extends JFrame {
             if (unitStr[i].length >= 4) {
                 MyQR qr = new MyQR();
                 // 顺序：编号 名称  产权  部门
-                qr.setText(unitStr[i][1],unitStr[i][0],unitStr[i][3],unitStr[i][2]);
-                qr.setQR(unitStr[i][1]);
-                qr.setBounds(0, (int) Const.PAPER_HEIGHT * i, Const.PAPER_WIDTH, Const.PAPER_HEIGHT);
+                qr.setText(unitStr[i]);
+                qr.setQR(unitStr[i][0]);
+                qr.setBounds(0, Const.PAPER_HEIGHT * i, Const.PAPER_WIDTH, Const.PAPER_HEIGHT);
                 imgPanel.add(qr);
                 countQR++;
             }
         }
 
         //调整下拉框高度
-        if (imgPanel.getHeight() < Const.PAPER_HEIGHT * countQR) {
-            imgPanel.setPreferredSize(new Dimension(imgPanel.getWidth(), (int) (Const.PAPER_HEIGHT * countQR)));
+        if (richtext.getHeight() < Const.PAPER_HEIGHT * countQR) {
+            imgPanel.setPreferredSize(new Dimension(imgPanel.getWidth(), (Const.PAPER_HEIGHT * countQR)));
+        } else{
+            imgPanel.setPreferredSize(new Dimension(imgPanel.getWidth(), richtext.getHeight()));
         }
         imgPanel.j.updateUI();
     }
@@ -144,8 +147,8 @@ public class MainApp extends JFrame {
                      }
                  }
                  job.setPageable(printBook);
+//                 job.printDialog();
                  job.print();
-
              } catch (Exception e) {
                  e.printStackTrace();
              }

@@ -78,7 +78,7 @@ public class MyQR extends JPanel  implements Printable {
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
         hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
         hints.put(EncodeHintType.MARGIN, 1);
-        BitMatrix bitMatrix = null;
+        BitMatrix bitMatrix;
         BufferedImage image = null;
 
         try {

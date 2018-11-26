@@ -18,24 +18,14 @@ class Const {
     static int LABEL_WIDTH = 60;
     static int TOP_MARGIN = 20;
 
-//    final static double PAPER_WIDTH = 240;
-//    final static double PAPER_HEIGHT = 160;
-
+    final static String APP_NAME = "二维码生成与打印. by 产品部";
+    final static ImageIcon ICON_APP = new ImageIcon(MainApp.class.getResource("/app.png"));
 
     // 系统常用字体
 //    public final static Font FONT_YAHEI_12 = new Font("微软雅黑", Font.PLAIN, 12);
     final static Font SONG_9 = new Font("宋体", Font.PLAIN, 9);
+    final static Font SONG_14 = new Font("宋体", Font.PLAIN, 14);
 
-    //主窗口背景色
-//    public final static Color GREEN = new Color(37, 174, 96);
-//    public final static Color GREEN_ACTIVE = new Color(106, 200, 146);
-//    public final static Color GREEN_LIGHT = new Color(166, 237, 198);
-
-
-    //主图标
-//    public final static ImageIcon ICON_APP = new ImageIcon(MainApp.class.getResource("/icon/app.png"));
-
-    //按钮 图标
     // 解析
     public final static ImageIcon ICON_RESOLVE = new ImageIcon(MainApp.class.getResource("/解析.png"));
     public final static ImageIcon ICON_RESOLVE_ENABLED = new ImageIcon(MainApp.class.getResource("/解析-选中.png"));
