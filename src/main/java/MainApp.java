@@ -43,7 +43,7 @@ public class MainApp extends JFrame {
         richtext.setBounds(20,20,500,600);
         richtext.setBackground(Color.white);
         richtext.setFont(Const.SONG_14);
-//        richtext.setText("请调整EXCEL列的顺序，按照“编号、名称、部门、产权”的顺序提交。");
+        richtext.setText("请调整EXCEL列的顺序，按照“编号、名称、部门、产权”的顺序提交。");
         this.add(richtext);
 
         btnResolve = new MyIconButton(Const.ICON_RESOLVE, Const.ICON_RESOLVE_ENABLED, Const.ICON_RESOLVE);
@@ -147,7 +147,7 @@ public class MainApp extends JFrame {
                      }
                  }
                  job.setPageable(printBook);
-//                 job.printDialog();
+
                  job.print();
              } catch (Exception e) {
                  e.printStackTrace();
@@ -173,6 +173,7 @@ public class MainApp extends JFrame {
                 window.setVisible(true);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getClass().getSimpleName() + "，" + e.getMessage());
+                System.exit(0);
             }
         });
     }
