@@ -22,7 +22,7 @@ public class MyQR extends JPanel  implements Printable {
         this.setLayout(null);
         this.setBackground(Color.white);
         this.setBackground(Color.white);
-//        this.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.gray));
+
         JLabel[] labels = new JLabel[4];
         labels[0] = new JLabel("编号:");
         labels[1] = new JLabel("名称:");
@@ -34,11 +34,10 @@ public class MyQR extends JPanel  implements Printable {
                     25, Const.LABEL_HEIGHT);
             labels[i].setFont(Const.SONG_9);
             labels[i].setVerticalTextPosition(JLabel.TOP);
-//            labels[i].setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black));
 
             txt[i] = new JLabel();
             txt[i].setVerticalTextPosition(JLabel.TOP);
-//            txt[i].setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black));
+
             txt[i].setFont(Const.SONG_9);
             txt[i].setBounds(labels[i].getX() + labels[i].getWidth(), Const.TOP_MARGIN + Const.LABEL_HEIGHT * i,
                     Const.LABEL_WIDTH, Const.LABEL_HEIGHT);
